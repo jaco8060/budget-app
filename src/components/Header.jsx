@@ -12,7 +12,7 @@ export default function Header() {
         <Toolbar>
           <AccountBalanceWalletIcon sx={{ mr: 2 }} />
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Jiggy Budget Tracker
+            Budget Tracker
           </Typography>
           <IconButton color="inherit" onClick={() => setOpenSettings(true)}>
             <SettingsIcon />
