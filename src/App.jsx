@@ -1,35 +1,69 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import AddIcon from "@mui/icons-material/Add";
+import { Box, Container, CssBaseline, Fab } from "@mui/material";
+import { amber, teal } from "@mui/material/colors";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import React, { useState } from "react";
+import AddSpendDialog from "./components/AddSpendDialog";
+import Header from "./components/Header";
+import SummaryDashboard from "./components/SummaryDashboard";
+import WeeklySpendsList from "./components/WeeklySpendsList";
+import { BudgetProvider } from "./context/BudgetContext";
+
+const proTheme = createTheme({
+  palette: {
+    mode: "dark",
+    primary: teal,
+    secondary: amber,
+    background: {
+      default: "#121212",
+      paper: "#1e1e1e",
+    },
+  },
+  typography: {
+    fontFamily: "Roboto, Arial, sans-serif",
+    h5: {
+      fontWeight: 700,
+    },
+  },
+});
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [openAddSpend, setOpenAddSpend] = useState(false);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <ThemeProvider theme={proTheme}>
+      <CssBaseline />
+      <BudgetProvider>
+        <Box
+          sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
+        >
+          <Header />
+          {/* 
+            FIX: Removed the maxWidth="lg" prop.
+            The Container will now be fluid and take up the full available width.
+          */}
+          <Container component="main" sx={{ py: 4, flexGrow: 1 }}>
+            <SummaryDashboard />
+            <WeeklySpendsList />
+          </Container>
+
+          <Fab
+            color="secondary"
+            aria-label="add"
+            sx={{ position: "fixed", bottom: 32, right: 32 }}
+            onClick={() => setOpenAddSpend(true)}
+          >
+            <AddIcon />
+          </Fab>
+
+          <AddSpendDialog
+            open={openAddSpend}
+            handleClose={() => setOpenAddSpend(false)}
+          />
+        </Box>
+      </BudgetProvider>
+    </ThemeProvider>
+  );
 }
 
-export default App
+export default App;
